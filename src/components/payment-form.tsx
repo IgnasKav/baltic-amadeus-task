@@ -29,6 +29,7 @@ export const PaymentForm = () => {
         e.preventDefault();
         form.handleSubmit();
       }}
+      className="flex flex-col gap-6 w-[400px]"
     >
       <h1>Personal Information</h1>
       {/* Components are bound to `form` and `field` to ensure extreme type safety */}

@@ -10,12 +10,14 @@ const darkTheme = createTheme({
 
 const App = () => {
   return (
-    <>
+    <div className="h-screen w-screen">
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <PaymentForm />
+        <div className="h-full flex items-center justify-center">
+          <PaymentForm />
+        </div>
       </ThemeProvider>
-    </>
+    </div>
   );
 };
 
