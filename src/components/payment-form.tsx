@@ -35,6 +35,9 @@ export const PaymentForm = () => {
       mode: "blur",
       modeAfterSubmission: "change",
     }),
+    validators: {
+      onSubmit: paymentFormSchema,
+    },
     onSubmit: ({ value }) => {
       // Do something with form data
       alert(JSON.stringify(value, null, 2));

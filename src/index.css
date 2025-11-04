@@ -1,2 +1,7 @@
 @import "tailwindcss";
 
+
+.MuiFormHelperText-root {
+    position: absolute;
+    top: 54px;
+}
