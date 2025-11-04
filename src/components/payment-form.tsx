@@ -1,5 +1,11 @@
 import { useAppForm } from "@/forms/form-config";
+import { revalidateLogic } from "@tanstack/react-form";
 import z from "zod";
+
+const paymentFormSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters long"),
+  age: z.number().min(13, "Age must be at least 13"),
+});
 
 export const PaymentForm = () => {
   const form = useAppForm({
@@ -7,13 +13,10 @@ export const PaymentForm = () => {
       username: "",
       age: 0,
     },
-    validators: {
-      // Pass a schema or function to validate
-      onChange: z.object({
-        username: z.string(),
-        age: z.number().min(13),
-      }),
-    },
+    validationLogic: revalidateLogic({
+      mode: "blur",
+      modeAfterSubmission: "change",
+    }),
     onSubmit: ({ value }) => {
       // Do something with form data
       alert(JSON.stringify(value, null, 2));
@@ -32,11 +35,17 @@ export const PaymentForm = () => {
       {/* Use `form.AppField` to render a component bound to a single field */}
       <form.AppField
         name="username"
+        validators={{
+          onDynamic: paymentFormSchema.shape.username,
+        }}
         children={(field) => <field.TextField label="Full Name" />}
       />
       {/* The "name" property will throw a TypeScript error if typo'd  */}
       <form.AppField
         name="age"
+        validators={{
+          onDynamic: paymentFormSchema.shape.age,
+        }}
         children={(field) => <field.NumberField label="Age" />}
       />
       {/* Components in `form.AppForm` have access to the form context */}

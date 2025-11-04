@@ -5,11 +5,7 @@ export function SubscribeButton({ label }: { label: string }) {
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
       {(isSubmitting) => (
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          onClick={() => form.handleSubmit()}
-        >
+        <button type="submit" disabled={isSubmitting}>
           {label}
         </button>
       )}

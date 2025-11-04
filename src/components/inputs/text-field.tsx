@@ -2,8 +2,10 @@ import { useFieldContext } from "@/forms/form-config";
 import { TextField as MuiTextField } from "@mui/material";
 
 export function TextField({ label }: { label: string }) {
-  // The `Field` infers that it should have a `value` type of `string`
   const { state, handleChange, handleBlur } = useFieldContext<string>();
+
+  const combinedError = state.meta.errors.map((e) => e.message).join(", ");
+
   return (
     <MuiTextField
       label={label}
@@ -11,6 +13,8 @@ export function TextField({ label }: { label: string }) {
       value={state.value}
       onChange={(e) => handleChange(e.target.value)}
       onBlur={handleBlur}
+      error={!state.meta.isValid}
+      helperText={state.meta.isValid ? "" : combinedError}
     />
   );
 }
