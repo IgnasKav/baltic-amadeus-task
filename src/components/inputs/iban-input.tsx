@@ -1,10 +1,10 @@
 import { defaultValues, withForm } from "@/forms/form-config";
 import { useQueryClient } from "@tanstack/react-query";
 import { ibanValidation } from "../schemas/payment-form-schema";
-
 type IbanFieldProps = {
   label: string;
   name: "payerAccountIBAN" | "payeeAccountIBAN";
+  onDynamicValidate?: (iban: string) => undefined | { message: string };
 };
 
 type ValidateResult = { valid: boolean; iban: string };
@@ -26,8 +26,9 @@ export const IbanField = withForm({
   props: {
     label: "",
     name: "payerAccountIBAN",
+    onDynamicValidate: undefined,
   } as IbanFieldProps,
-  render: function Render({ form, name, label }) {
+  render: function Render({ form, name, label, onDynamicValidate }) {
     const queryClient = useQueryClient();
 
     return (
@@ -35,15 +36,29 @@ export const IbanField = withForm({
         <form.AppField
           name={name}
           validators={{
-            onDynamic: ibanValidation,
-            onBlurAsyncDebounceMs: 500,
+            onDynamic: ({ value }) => {
+              const parseRes = ibanValidation.safeParse(value);
+
+              if (parseRes.success === false) {
+                return {
+                  message: parseRes.error.message,
+                };
+              }
+
+              if (onDynamicValidate) {
+                return onDynamicValidate(value);
+              }
+
+              return undefined;
+            },
+            onBlurAsyncDebounceMs: 300,
             onBlurAsync: async ({ value }) => {
               const iban = (value || "").trim();
-              const isValid = ibanValidation.safeParse(iban);
+              const parseRes = ibanValidation.safeParse(iban);
 
-              if (isValid.success === false) {
+              if (parseRes.success === false) {
                 return {
-                  message: "IBAN format is invalid",
+                  message: parseRes.error.message,
                 };
               }
 
