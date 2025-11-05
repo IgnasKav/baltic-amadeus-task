@@ -2,27 +2,11 @@ import { defaultValues, useAppForm } from "@/forms/form-config";
 import { revalidateLogic, useStore } from "@tanstack/react-form";
 import { paymentFormSchema } from "@/components/schemas/payment-form-schema";
 import { IbanField } from "./inputs/iban-input";
-
-const payerAccounts = [
-  {
-    iban: "LT307300010172619160",
-    id: "1",
-    balance: 1000.12,
-  },
-  {
-    iban: "LT307300010172619161",
-    id: "2",
-    balance: 2.43,
-  },
-
-  {
-    iban: "LT307300010172619162",
-    id: "3",
-    balance: -5.87,
-  },
-];
+import { payerAccounts } from "./schemas/payer-accounts";
+import { useAccount } from "@/contexts/account-context";
 
 export const PaymentForm = () => {
+  const { currentAccount, locale } = useAccount();
   const form = useAppForm({
     ...defaultValues,
     validationLogic: revalidateLogic({
@@ -56,6 +40,12 @@ export const PaymentForm = () => {
       }}
       className="flex flex-col gap-8 w-[400px]"
     >
+      {currentAccount && (
+        <div>
+          <div>Account: {currentAccount.iban}</div>
+          <div>Account balance: {currentAccount.balance}</div>
+        </div>
+      )}
       <h1>Payment Form</h1>
       <IbanField
         form={form}

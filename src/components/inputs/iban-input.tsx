@@ -45,11 +45,11 @@ export const IbanField = withForm({
                 };
               }
 
-              if (onDynamicValidate) {
-                return onDynamicValidate(value);
-              }
+              const err = onDynamicValidate
+                ? onDynamicValidate(value)
+                : undefined;
 
-              return undefined;
+              return err;
             },
             onBlurAsyncDebounceMs: 300,
             onBlurAsync: async ({ value }) => {
