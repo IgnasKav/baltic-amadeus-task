@@ -42,6 +42,7 @@ export const PaymentForm = () => {
     form.store,
     (state) => state.values.payerAccountIBAN
   );
+
   const payerAccountIBANMeta = useStore(
     form.store,
     (state) => state.fieldMeta.payerAccountIBAN
@@ -56,11 +57,45 @@ export const PaymentForm = () => {
       className="flex flex-col gap-8 w-[400px]"
     >
       <h1>Payment Form</h1>
+      <IbanField
+        form={form}
+        name="payerAccountIBAN"
+        label="Payer Account IBAN"
+        onDynamicValidate={(value: string) => {
+          const payerExists = payerAccounts.find((acc) => acc.iban === value);
 
+          if (!payerExists) {
+            return {
+              message: "Payer account IBAN not found.",
+            };
+          }
+
+          return undefined;
+        }}
+      />
       <form.AppField
         name="paymentAmount"
         validators={{
-          onDynamic: paymentFormSchema.shape.paymentAmount,
+          onDynamic: ({ value }) => {
+            const parseRes =
+              paymentFormSchema.shape.paymentAmount.safeParse(value);
+
+            if (parseRes.success === false) {
+              return {
+                message: parseRes.error.issues[0].message,
+              };
+            }
+
+            const payerAccount = payerAccounts.find(
+              (acc) => acc.iban === payerAccountIBAN
+            );
+
+            if (payerAccount && value > payerAccount.balance) {
+              return {
+                message: "Insufficient funds in the payer account.",
+              };
+            }
+          },
         }}
         children={(field) => (
           <field.NumberField
@@ -87,22 +122,7 @@ export const PaymentForm = () => {
           return undefined;
         }}
       />
-      <IbanField
-        form={form}
-        name="payerAccountIBAN"
-        label="Payer Account IBAN"
-        onDynamicValidate={(value: string) => {
-          const payerExists = payerAccounts.find((acc) => acc.iban === value);
 
-          if (!payerExists) {
-            return {
-              message: "Payer account IBAN not found.",
-            };
-          }
-
-          return undefined;
-        }}
-      />
       <form.AppField
         name="payee"
         validators={{
