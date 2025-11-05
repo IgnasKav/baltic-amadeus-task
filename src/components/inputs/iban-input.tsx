@@ -73,7 +73,7 @@ export const IbanField = withForm({
 
               if (parseRes.success === false) {
                 return {
-                  message: parseRes.error.message,
+                  message: parseRes.error.issues[0].message,
                 };
               }
 

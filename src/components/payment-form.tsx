@@ -68,7 +68,11 @@ export const PaymentForm = () => {
         validators={{
           onBlurListenTo: ["payerAccountIBAN"],
           onChangeListenTo: ["payerAccountIBAN"],
-          onDynamic: ({ value }) => {
+          onDynamic: ({ value, fieldApi }) => {
+            const isTouched = fieldApi.getMeta().isTouched;
+
+            if (!isTouched) return;
+
             const parseRes =
               paymentFormSchema.shape.paymentAmount.safeParse(value);
 
@@ -101,11 +105,9 @@ export const PaymentForm = () => {
         name="payeeAccountIBAN"
         label="Payee Account IBAN"
         onDynamicValidate={(value: string) => {
-          const payerAccountIban = form.getFieldValue("payerAccountIBAN");
+          if (payerAccountIBAN.trim() === "") return undefined;
 
-          if (payerAccountIban.trim() === "") return undefined;
-
-          if (payerAccountIban === value) {
+          if (payerAccountIBAN === value) {
             return {
               message: "Payer and Payee IBANs cannot be the same.",
             };
