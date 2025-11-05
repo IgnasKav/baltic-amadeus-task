@@ -66,6 +66,8 @@ export const PaymentForm = () => {
       <form.AppField
         name="paymentAmount"
         validators={{
+          onBlurListenTo: ["payerAccountIBAN"],
+          onChangeListenTo: ["payerAccountIBAN"],
           onDynamic: ({ value }) => {
             const parseRes =
               paymentFormSchema.shape.paymentAmount.safeParse(value);

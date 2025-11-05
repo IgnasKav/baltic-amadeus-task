@@ -1,6 +1,8 @@
 import { defaultValues, withForm } from "@/forms/form-config";
 import { useQueryClient } from "@tanstack/react-query";
 import { ibanValidation } from "../schemas/payment-form-schema";
+import { useAccount } from "@/contexts/account-context";
+import { payerAccounts } from "../schemas/payer-accounts";
 type IbanFieldProps = {
   label: string;
   name: "payerAccountIBAN" | "payeeAccountIBAN";
@@ -30,11 +32,24 @@ export const IbanField = withForm({
   } as IbanFieldProps,
   render: function Render({ form, name, label, onDynamicValidate }) {
     const queryClient = useQueryClient();
+    const { setCurrentAccount } = useAccount();
 
     return (
       <div className="w-full">
         <form.AppField
           name={name}
+          listeners={{
+            onBlur: ({ value, fieldApi }) => {
+              const isValid = fieldApi.getMeta().isValid;
+
+              if (isValid) {
+                const currencAccount = payerAccounts.find(
+                  (a) => a.iban === value
+                );
+                setCurrentAccount(currencAccount || null);
+              }
+            },
+          }}
           validators={{
             onDynamic: ({ value }) => {
               const parseRes = ibanValidation.safeParse(value);
