@@ -1,5 +1,5 @@
 import { defaultValues, useAppForm } from "@/forms/form-config";
-import { revalidateLogic } from "@tanstack/react-form";
+import { revalidateLogic, useStore } from "@tanstack/react-form";
 import { paymentFormSchema } from "@/components/schemas/payment-form-schema";
 import { IbanField } from "./inputs/iban-input";
 
@@ -38,6 +38,15 @@ export const PaymentForm = () => {
     },
   });
 
+  const payerAccountIBAN = useStore(
+    form.store,
+    (state) => state.values.payerAccountIBAN
+  );
+  const payerAccountIBANMeta = useStore(
+    form.store,
+    (state) => state.fieldMeta.payerAccountIBAN
+  );
+
   return (
     <form
       onSubmit={(e) => {
@@ -53,7 +62,12 @@ export const PaymentForm = () => {
         validators={{
           onDynamic: paymentFormSchema.shape.paymentAmount,
         }}
-        children={(field) => <field.NumberField label="Payment Amount" />}
+        children={(field) => (
+          <field.NumberField
+            label="Payment Amount"
+            disabled={!payerAccountIBAN || !payerAccountIBANMeta.isValid}
+          />
+        )}
       />
       <IbanField
         form={form}

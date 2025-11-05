@@ -1,7 +1,12 @@
 import { useFieldContext } from "@/forms/form-config";
 import { TextField } from "@mui/material";
 
-export function NumberField({ label }: { label: string }) {
+type NumberFieldProps = {
+  label: string;
+  disabled?: boolean;
+};
+
+export function NumberField({ label, disabled }: NumberFieldProps) {
   const { state, handleChange, handleBlur } = useFieldContext<number>();
 
   const combinedError = state.meta.errors.map((e) => e.message).join(", ");
@@ -16,6 +21,7 @@ export function NumberField({ label }: { label: string }) {
       onBlur={handleBlur}
       error={!state.meta.isValid}
       helperText={state.meta.isValid ? "" : combinedError}
+      disabled={disabled}
     />
   );
 }
