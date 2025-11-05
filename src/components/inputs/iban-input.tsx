@@ -39,7 +39,13 @@ export const IbanField = withForm({
             onBlurAsyncDebounceMs: 500,
             onBlurAsync: async ({ value }) => {
               const iban = (value || "").trim();
-              ibanValidation.parse(iban);
+              const isValid = ibanValidation.safeParse(iban);
+
+              if (isValid.success === false) {
+                return {
+                  message: "IBAN format is invalid",
+                };
+              }
 
               const data = await queryClient.ensureQueryData<ValidateResult>({
                 queryKey: ["validate-iban", iban],
@@ -48,7 +54,6 @@ export const IbanField = withForm({
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7d
               });
 
-              console.log("data", data);
               return data.valid
                 ? undefined
                 : {

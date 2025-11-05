@@ -1,5 +1,6 @@
 import { useFieldContext } from "@/forms/form-config";
-import { TextField as MuiTextField } from "@mui/material";
+import { InputAdornment, TextField as MuiTextField } from "@mui/material";
+import { Spinner } from "../shared/spinner";
 
 type TextFieldProps = {
   label: string;
@@ -10,6 +11,7 @@ export function TextField({ label, className }: TextFieldProps) {
   const { state, handleChange, handleBlur } = useFieldContext<string>();
 
   const combinedError = state.meta.errors.map((e) => e.message).join(", ");
+  const isValidating = state.meta.isValidating;
 
   return (
     <MuiTextField
@@ -21,6 +23,15 @@ export function TextField({ label, className }: TextFieldProps) {
       onBlur={handleBlur}
       error={!state.meta.isValid}
       helperText={state.meta.isValid ? "" : combinedError}
+      slotProps={{
+        input: {
+          endAdornment: (
+            <InputAdornment position="end">
+              {isValidating ? <Spinner /> : null}
+            </InputAdornment>
+          ),
+        },
+      }}
     />
   );
 }
