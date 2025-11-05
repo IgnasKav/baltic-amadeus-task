@@ -3,6 +3,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AccountProvider } from "./contexts/account-context";
+import { payerAccounts } from "./components/schemas/payer-accounts";
 
 const darkTheme = createTheme({
   palette: {
@@ -13,7 +14,7 @@ const darkTheme = createTheme({
 const App = () => {
   return (
     <div className="h-screen w-screen p-8">
-      <AccountProvider>
+      <AccountProvider accounts={payerAccounts}>
         <QueryClientProvider client={new QueryClient()}>
           <ThemeProvider theme={darkTheme}>
             <CssBaseline />

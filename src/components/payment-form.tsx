@@ -2,11 +2,10 @@ import { defaultValues, useAppForm } from "@/forms/form-config";
 import { revalidateLogic, useStore } from "@tanstack/react-form";
 import { paymentFormSchema } from "@/components/schemas/payment-form-schema";
 import { IbanField } from "./inputs/iban-input";
-import { payerAccounts } from "./schemas/payer-accounts";
 import { useAccount } from "@/contexts/account-context";
 
 export const PaymentForm = () => {
-  const { currentAccount, locale } = useAccount();
+  const { currentAccount, processPayment, accounts } = useAccount();
   const form = useAppForm({
     ...defaultValues,
     validationLogic: revalidateLogic({
@@ -18,6 +17,7 @@ export const PaymentForm = () => {
     },
     onSubmit: ({ value }) => {
       // Do something with form data
+      processPayment(value);
       alert(JSON.stringify(value, null, 2));
     },
   });
@@ -52,7 +52,7 @@ export const PaymentForm = () => {
         name="payerAccountIBAN"
         label="Payer Account IBAN"
         onDynamicValidate={(value: string) => {
-          const payerExists = payerAccounts.find((acc) => acc.iban === value);
+          const payerExists = accounts.find((acc) => acc.iban === value);
 
           if (!payerExists) {
             return {
@@ -82,7 +82,7 @@ export const PaymentForm = () => {
               };
             }
 
-            const payerAccount = payerAccounts.find(
+            const payerAccount = accounts.find(
               (acc) => acc.iban === payerAccountIBAN
             );
 
