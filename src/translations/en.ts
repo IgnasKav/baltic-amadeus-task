@@ -29,7 +29,16 @@ export const en = {
         "required": "Purpose is required.",
         "maxLength": "Purpose cannot exceed 135 characters."
     },
-    "submit": "Submit"
+    "submit": "Submit",
+    "accountsInfoBanner": {
+        "title": "Available payer accounts",
+        "note": "Payments can be made only from the listed accounts. If payment is made to one of these accounts, the balance will update accordingly."
+    },
+    "currentAccountInfoBanner": {
+        "currentAccount": "Current Account",
+        "balance": "Balance",
+        "noAccountSelected": "No account selected"
+    }
 };
 
 export type Translations = typeof en;

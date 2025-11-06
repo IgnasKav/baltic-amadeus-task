@@ -31,5 +31,14 @@ export const lt: Translations = {
         "required": "Tikslas yra privalomas.",
         "maxLength": "Tikslas negali viršyti 135 simbolių."
     },
-    "submit": "Pateikti"
+    "submit": "Pateikti",
+    "accountsInfoBanner": {
+        "title": "Galimos mokėtojo sąskaitos",
+        "note": "Mokėjimai gali būti atliekami tik iš nurodytų sąskaitų. Jei mokėjimas atliekamas į vieną iš šių sąskaitų, likutis bus atitinkamai atnaujintas."
+    },
+    "currentAccountInfoBanner": {
+        "currentAccount": "Einamoji sąskaita",
+        "balance": "Likutis",
+        "noAccountSelected": "Nėra pasirinktos sąskaitos"
+    }
 };
