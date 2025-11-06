@@ -61,11 +61,10 @@ export const PaymentForm = () => {
         name="paymentAmount"
         validators={{
           onBlurListenTo: ["payerAccountIBAN"],
-          onChangeListenTo: ["payerAccountIBAN"],
-          onDynamic: ({ value, fieldApi }) => {
+          onBlur: ({ value, fieldApi }) => {
             const isTouched = fieldApi.getMeta().isTouched;
 
-            if (!isTouched) return;
+            if (!isTouched) return undefined;
 
             const parseRes =
               paymentFormSchema.shape.paymentAmount.safeParse(value);
@@ -89,6 +88,8 @@ export const PaymentForm = () => {
                 message: translations.paymentField.insufficientPayerBalance,
               };
             }
+
+            return undefined;
           },
         }}
         children={(field) => (

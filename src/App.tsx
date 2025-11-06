@@ -22,7 +22,7 @@ const App = () => {
             <CssBaseline />
             <AccountHelper />
             <CurrentAccountInfo />
-            <div className="h-full flex items-center justify-center">
+            <div className="mt-8 flex items-center justify-center">
               <PaymentForm />
             </div>
           </ThemeProvider>
