@@ -9,16 +9,16 @@ export const lt: Translations = {
         'maxLength': "IBAN negali viršyti 34 simbolių."
     },
     "payerAccountIbanField": {
-        "label": "Siuntėjo sąskaitos IBAN",
-        "notFound": "Siuntėjo sąskaitos IBAN nerastas."
+        "label": "Mokėtojo sąskaitos IBAN",
+        "notFound": "Mokėtojo sąskaitos IBAN nerastas."
     },
     "payeeAccountIbanField": {
         "label": "Gavėjo sąskaitos IBAN",
-        "sameAsPayer": "Siuntėjo ir gavėjo IBAN negali būti tas pats."
+        "sameAsPayer": "Mokėtojo ir gavėjo IBAN negali būti tas pats."
     },
     "paymentField": {
         "label": "Mokėjimo suma",
-        "insufficientPayerBalance": "Nepakanka lėšų siuntėjo sąskaitoje.",
+        "insufficientPayerBalance": "Nepakanka lėšų mokėtojo sąskaitoje.",
         "min": "Mokėjimo suma turi būti bent 0.01",
     },
     "payeeField": {
