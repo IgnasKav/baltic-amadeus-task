@@ -2,7 +2,17 @@ import { useAccount } from "@/contexts/account-context";
 import { cn } from "@/lib/util";
 
 export const CurrentAccountInfo = () => {
-  const { currentAccount } = useAccount();
+  const { currentAccount, locale } = useAccount();
+
+  const formatBalance = (balance: number) => {
+    const isLithuanian = locale === "lt";
+
+    return balance.toLocaleString(isLithuanian ? "lt-LT" : "en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   return (
     <div className="p-4 border rounded-lg mt-4">
       {currentAccount ? (
@@ -17,7 +27,7 @@ export const CurrentAccountInfo = () => {
                 { "text-green-600": currentAccount.balance >= 0 }
               )}
             >
-              {currentAccount.balance}
+              {formatBalance(currentAccount.balance)} EUR
             </div>
           </div>
         </div>

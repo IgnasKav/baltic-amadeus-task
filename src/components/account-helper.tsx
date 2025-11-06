@@ -12,6 +12,10 @@ export const AccountHelper = () => {
           </div>
         ))}
       </div>
+      <div className="mt-2 bg-gray-600 rounded-lg p-2">
+        Payments can be made only from the listed accounts. If payment is made
+        to one of these accounts, the balance will update accordingly.
+      </div>
     </div>
   );
 };
