@@ -1,4 +1,4 @@
-import { useFieldContext } from "@/forms/form-config";
+import { useFieldContext } from "@/lib/form-config";
 import { InputAdornment, TextField as MuiTextField } from "@mui/material";
 import { Spinner } from "../shared/spinner";
 

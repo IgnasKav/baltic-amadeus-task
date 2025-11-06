@@ -1,4 +1,4 @@
-import { useFieldContext } from "@/forms/form-config";
+import { useFieldContext } from "@/lib/form-config";
 import { TextField } from "@mui/material";
 
 type NumberFieldProps = {

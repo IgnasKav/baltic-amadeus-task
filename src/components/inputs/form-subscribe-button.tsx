@@ -1,4 +1,4 @@
-import { useFormContext } from "@/forms/form-config";
+import { useFormContext } from "@/lib/form-config";
 import { Button } from "@mui/material";
 
 export function SubscribeButton({ label }: { label: string }) {

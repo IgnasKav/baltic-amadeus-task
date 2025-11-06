@@ -1,4 +1,4 @@
-import { defaultValues, useAppForm } from "@/forms/form-config";
+import { defaultValues, useAppForm } from "@/lib/form-config";
 import { revalidateLogic, useStore } from "@tanstack/react-form";
 import { paymentFormSchema } from "@/components/schemas/payment-form-schema";
 import { IbanField } from "./inputs/iban-input";
@@ -6,8 +6,7 @@ import { useAccount } from "@/contexts/account-context";
 import { LanguageField } from "./inputs/language-field";
 
 export const PaymentForm = () => {
-  const { currentAccount, processPayment, accounts, translations } =
-    useAccount();
+  const { processPayment, accounts, translations } = useAccount();
   const form = useAppForm({
     ...defaultValues,
     validationLogic: revalidateLogic({
@@ -40,12 +39,6 @@ export const PaymentForm = () => {
       }}
       className="flex flex-col gap-8 w-[400px]"
     >
-      {currentAccount && (
-        <div>
-          <div>Account: {currentAccount.iban}</div>
-          <div>Account balance: {currentAccount.balance}</div>
-        </div>
-      )}
       <LanguageField />
       <h1>{translations.paymentFormTitle}</h1>
       <IbanField

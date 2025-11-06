@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AccountProvider } from "./contexts/account-context";
 import { payerAccounts } from "./components/schemas/payer-accounts";
 import { AccountHelper } from "./components/account-helper";
+import { CurrentAccountInfo } from "./components/current-account-info";
 
 const darkTheme = createTheme({
   palette: {
@@ -20,6 +21,7 @@ const App = () => {
           <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <AccountHelper />
+            <CurrentAccountInfo />
             <div className="h-full flex items-center justify-center">
               <PaymentForm />
             </div>

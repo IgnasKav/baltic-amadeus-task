@@ -1,4 +1,4 @@
-import { defaultValues, withForm } from "@/forms/form-config";
+import { defaultValues, withForm } from "@/lib/form-config";
 import { useQueryClient } from "@tanstack/react-query";
 import { ibanValidation } from "../schemas/payment-form-schema";
 import { useAccount } from "@/contexts/account-context";
