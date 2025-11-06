@@ -2,6 +2,7 @@ import { defaultValues, withForm } from "@/forms/form-config";
 import { useQueryClient } from "@tanstack/react-query";
 import { ibanValidation } from "../schemas/payment-form-schema";
 import { useAccount } from "@/contexts/account-context";
+
 type IbanFieldProps = {
   label: string;
   name: "payerAccountIBAN" | "payeeAccountIBAN";
@@ -31,7 +32,7 @@ export const IbanField = withForm({
   } as IbanFieldProps,
   render: function Render({ form, name, label, onDynamicValidate }) {
     const queryClient = useQueryClient();
-    const { setCurrentAccount, accounts } = useAccount();
+    const { setCurrentAccount, accounts, translations } = useAccount();
 
     return (
       <div className="w-full">
@@ -54,8 +55,12 @@ export const IbanField = withForm({
               const parseRes = ibanValidation.safeParse(value);
 
               if (parseRes.success === false) {
+                const errorKey = parseRes.error.issues[0].message;
+                // @ts-expect-error errorKey is set in schema
+                const translatedError = translations.ibanField[errorKey];
+
                 return {
-                  message: parseRes.error.issues[0].message,
+                  message: translatedError,
                 };
               }
 
@@ -86,7 +91,7 @@ export const IbanField = withForm({
               return data.valid
                 ? undefined
                 : {
-                    message: "IBAN is invalid according to external validation",
+                    message: translations.ibanField.apiValidationFailed,
                   };
             },
           }}

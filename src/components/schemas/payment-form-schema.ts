@@ -4,21 +4,21 @@ import { PaymentForm } from '../payment-form';
 const ibanValidation = z
     .string()
     // Will reduce request count to endpoint
-    .min(15, "IBAN must be at least 15 characters long")
-    .max(34, "IBAN cannot exceed 34 characters");
+    .min(15, "minLength")
+    .max(34, "maxLength");
 
 const paymentFormSchema = z.object({
-    paymentAmount: z.number().min(0.01, "Payment amount must be at least 0.01"),
+    paymentAmount: z.number().min(0.01, "min"),
     payerAccountIBAN: ibanValidation,
     payeeAccountIBAN: ibanValidation,
     payee: z
         .string()
-        .min(3, "Payee is required")
-        .max(70, "Payee cannot exceed 70 characters"),
+        .min(3, "required")
+        .max(70, "maxLength"),
     purpose: z
         .string()
-        .min(3, "Purpose is required")
-        .max(135, "Purpose cannot exceed 135 characters"),
+        .min(3, "required")
+        .max(135, "maxLength"),
 });
 
 type PaymentForm = z.infer<typeof paymentFormSchema>;

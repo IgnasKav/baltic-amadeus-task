@@ -3,9 +3,11 @@ import { revalidateLogic, useStore } from "@tanstack/react-form";
 import { paymentFormSchema } from "@/components/schemas/payment-form-schema";
 import { IbanField } from "./inputs/iban-input";
 import { useAccount } from "@/contexts/account-context";
+import { LanguageField } from "./inputs/language-field";
 
 export const PaymentForm = () => {
-  const { currentAccount, processPayment, accounts } = useAccount();
+  const { currentAccount, processPayment, accounts, translations } =
+    useAccount();
   const form = useAppForm({
     ...defaultValues,
     validationLogic: revalidateLogic({
@@ -16,9 +18,7 @@ export const PaymentForm = () => {
       onSubmit: paymentFormSchema,
     },
     onSubmit: ({ value }) => {
-      // Do something with form data
       processPayment(value);
-      alert(JSON.stringify(value, null, 2));
     },
   });
 
@@ -46,17 +46,18 @@ export const PaymentForm = () => {
           <div>Account balance: {currentAccount.balance}</div>
         </div>
       )}
-      <h1>Payment Form</h1>
+      <LanguageField />
+      <h1>{translations.paymentFormTitle}</h1>
       <IbanField
         form={form}
         name="payerAccountIBAN"
-        label="Payer Account IBAN"
+        label={translations.payerAccountIbanField.label}
         onDynamicValidate={(value: string) => {
           const payerExists = accounts.find((acc) => acc.iban === value);
 
           if (!payerExists) {
             return {
-              message: "Payer account IBAN not found.",
+              message: translations.payerAccountIbanField.notFound,
             };
           }
 
@@ -77,8 +78,12 @@ export const PaymentForm = () => {
               paymentFormSchema.shape.paymentAmount.safeParse(value);
 
             if (parseRes.success === false) {
+              const errorKey = parseRes.error.issues[0].message;
+              // @ts-expect-error errorKey is set in schema
+              const translatedError = translations.paymentField[errorKey];
+
               return {
-                message: parseRes.error.issues[0].message,
+                message: translatedError,
               };
             }
 
@@ -88,14 +93,14 @@ export const PaymentForm = () => {
 
             if (payerAccount && value > payerAccount.balance) {
               return {
-                message: "Insufficient funds in the payer account.",
+                message: translations.paymentField.insufficientPayerBalance,
               };
             }
           },
         }}
         children={(field) => (
           <field.NumberField
-            label="Payment Amount"
+            label={translations.paymentField.label}
             disabled={!payerAccountIBAN || !payerAccountIBANMeta.isValid}
           />
         )}
@@ -103,13 +108,13 @@ export const PaymentForm = () => {
       <IbanField
         form={form}
         name="payeeAccountIBAN"
-        label="Payee Account IBAN"
+        label={translations.payeeAccountIbanField.label}
         onDynamicValidate={(value: string) => {
           if (payerAccountIBAN.trim() === "") return undefined;
 
           if (payerAccountIBAN === value) {
             return {
-              message: "Payer and Payee IBANs cannot be the same.",
+              message: translations.payeeAccountIbanField.sameAsPayer,
             };
           }
 
@@ -120,19 +125,47 @@ export const PaymentForm = () => {
       <form.AppField
         name="payee"
         validators={{
-          onDynamic: paymentFormSchema.shape.payee,
+          onDynamic: ({ value }) => {
+            const parseRes = paymentFormSchema.shape.payee.safeParse(value);
+
+            if (parseRes.success === false) {
+              const errorKey = parseRes.error.issues[0].message;
+              // @ts-expect-error errorKey is set in schema
+              const translatedError = translations.payeeField[errorKey];
+
+              return {
+                message: translatedError,
+              };
+            }
+          },
         }}
-        children={(field) => <field.TextField label="Payee" />}
+        children={(field) => (
+          <field.TextField label={translations.payeeField.label} />
+        )}
       />
       <form.AppField
         name="purpose"
         validators={{
-          onDynamic: paymentFormSchema.shape.purpose,
+          onDynamic: ({ value }) => {
+            const parseRes = paymentFormSchema.shape.purpose.safeParse(value);
+
+            if (parseRes.success === false) {
+              const errorKey = parseRes.error.issues[0].message;
+              // @ts-expect-error errorKey is set in schema
+              const translatedError = translations.purposeField[errorKey];
+
+              return {
+                message: translatedError,
+              };
+            }
+          },
         }}
-        children={(field) => <field.TextField label="Purpose" />}
+        children={(field) => (
+          <field.TextField label={translations.purposeField.label} />
+        )}
       />
       <form.AppForm>
-        <form.SubscribeButton label="Submit" />
+        <form.SubscribeButton label={translations.submit} />
       </form.AppForm>
     </form>
   );

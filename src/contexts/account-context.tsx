@@ -1,10 +1,16 @@
 import type { PayerAccount } from "@/components/schemas/payer-accounts";
 import type { PaymentForm } from "@/components/schemas/payment-form-schema";
+import type { Translations } from "@/translations/en";
+import {
+  translations as allTranslations,
+  type Locale,
+} from "@/translations/translations";
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 interface AccountContextType {
-  locale: string;
-  setLocale: (locale: string) => void;
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  translations: Translations;
   currentAccount: PayerAccount | null;
   setCurrentAccount: (account: PayerAccount | null) => void;
   accounts: PayerAccount[];
@@ -18,12 +24,16 @@ export const AccountProvider: React.FC<{
   accounts: PayerAccount[];
   children: ReactNode;
 }> = ({ children, accounts: initialAccounts }) => {
-  const [locale, setLocale] = useState<string>("en");
+  const [locale, setLocale] = useState<Locale>("en");
   const [currentAccount, setCurrentAccount] = useState<PayerAccount | null>(
     null
   );
   const [accounts, setAccounts] = useState<PayerAccount[]>(initialAccounts);
   const [payments, setPayments] = useState<PaymentForm[]>([]);
+
+  const [translations, setTranslations] = useState<Translations>(
+    allTranslations[locale]
+  );
 
   const processPayment = (p: PaymentForm) => {
     const { payerAccountIBAN, payeeAccountIBAN, paymentAmount } = p;
@@ -47,7 +57,6 @@ export const AccountProvider: React.FC<{
         return acc;
       });
 
-      // Find and update current account from the newly updated accounts
       const updatedCurrent = updatedAccounts.find(
         (acc) => acc.iban === payerAccountIBAN
       );
@@ -62,11 +71,17 @@ export const AccountProvider: React.FC<{
     setPayments((prevPayments) => [...prevPayments, p]);
   };
 
+  const handleLocaleChange = (locale: Locale) => {
+    setLocale(locale);
+    setTranslations(allTranslations[locale]);
+  };
+
   return (
     <AccountContext.Provider
       value={{
         locale,
-        setLocale,
+        setLocale: handleLocaleChange,
+        translations,
         currentAccount,
         setCurrentAccount,
         accounts,
