@@ -20,9 +20,11 @@ const App = () => {
         <QueryClientProvider client={new QueryClient()}>
           <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <AccountHelper />
-            <CurrentAccountInfo />
-            <div className="mt-8 flex items-center justify-center">
+            <div className="mt-8 flex flex-col gap-8 items-center justify-center">
+              <div className="max-w-[800px]">
+                <AccountHelper />
+                <CurrentAccountInfo />
+              </div>
               <PaymentForm />
             </div>
           </ThemeProvider>
