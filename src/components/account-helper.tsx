@@ -5,11 +5,9 @@ export const AccountHelper = () => {
   return (
     <div className="p-4 border rounded-lg">
       {translations.accountsInfoBanner.title}
-      <div className="mt-2 flex gap-2">
+      <div className="mt-2 flex flex-wrap gap-2">
         {accounts.map((account) => (
-          <div key={account.id}>
-            <div>{account.iban}</div>
-          </div>
+          <div key={account.id}>{account.iban}</div>
         ))}
       </div>
       <div className="mt-2 bg-gray-600 rounded-lg p-2">

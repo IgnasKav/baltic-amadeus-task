@@ -37,7 +37,7 @@ export const PaymentForm = () => {
         e.preventDefault();
         form.handleSubmit();
       }}
-      className="flex flex-col gap-8 w-[400px]"
+      className="flex flex-col gap-8 w-full max-w-[400px] pb-8"
     >
       <LanguageField />
       <h1>{translations.paymentFormTitle}</h1>
